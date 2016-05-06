@@ -1,8 +1,8 @@
 CC=g++
 DEBUG=-g
 
-CFLAGS= -Wall -c -std=gnu++11 ${DEBUG}
-OBJS=tools.o clust.o bitset_util.o distance.o fhash.o
+CFLAGS= -Wall -c ${DEBUG} -std=gnu++0x
+OBJS=tools.o clust.o bitset_util.o distance.o fhash.o classifier.o
 
 all: hclustering
 
@@ -23,6 +23,9 @@ distance.o: distance.cpp distance.h
 
 fhash.o: fhash.cpp fhash.h
 	${CC} ${CFLAGS} fhash.cpp
+
+classifier.o: classifier.cpp classifier.h
+	${CC} ${CFLAGS} classifier.cpp
 
 clean:
 	rm -rf *.o hclustering

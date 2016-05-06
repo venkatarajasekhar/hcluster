@@ -4,7 +4,7 @@
 #include <bitset>
 #include <vector>
 
-#define FEATURE_SIZE 240007
+#include "tools.h"
 
 using namespace std;
 

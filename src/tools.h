@@ -1,3 +1,6 @@
+#ifndef _TOOTLS_SONGLH
+#define _TOOTLS_SONGLH
+
 #define EXEC_PROGRAM				"hclustering"
 
 #define DENSE_INPUT					'D'
@@ -49,6 +52,8 @@
 #define FILENAME_LENGTH				DEFAULT_STRING_LENGTH
 #define EMPTY_STRING				""
 
+#define FEATURE_SIZE 				240007
+
 const int MIN_DIST=10000;
 
 const int DOT_PRODUCT=0;
@@ -94,3 +99,5 @@ extern void printCommandInfo(commandLineArgument &myCLA);
 extern void setCommandLine(commandLineArgument &myCLA);
 extern void getCommandLine(int argc, char **argv, commandLineArgument &myCLA);
 extern int read_sampledir(char *cur_dir, sample_t **sample_list, int *nsamples);
+
+#endif

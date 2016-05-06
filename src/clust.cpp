@@ -5,9 +5,10 @@
 
 #include "tools.h"
 #include "bitset_util.h"
+#include "distance.h"
+#include "classifier.h"
 
 using namespace std;
-
 
 int main(int argc, char * argv[])
 {
@@ -57,5 +58,23 @@ int main(int argc, char * argv[])
 		cout << "Cannot load distance data!\n";
 		exit(EXIT_FAILURE);
 	}
+
+	classifier classf(bbs, Dist);
+
+	if (myCLA.cutoffType == BY_NUMBER)
+		classf.setCluster(myCLA.numCluster);
+	else
+		classf.setThreshold(myCLA.threshold);
+
+	cout << endl << "  Do clustering ..." << endl;
+	classf.clustering(myCLA.algorithmType);
+	cout<<"  Clustering completed, output results ..." << endl;
+
+
+	unsigned int size_threshold = 1;
+	string s = string(myCLA.clusterFilename);
+	classf.print_clusters(s, size_threshold);
+
+	return 0;
 
 }
