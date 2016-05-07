@@ -36,6 +36,9 @@ private:
 		}
 	};
 
+
+public:
+
 	// multiset for storing sorted distances: insert/delete operation - O(log N)
 	vector<multiset<Distance, Cmp> > P;
 	// 2d vector for storing distances matrix
@@ -47,8 +50,6 @@ private:
 
 	void init();
 	void populate_distance();
-
-public:
 
 	// The way of separating clusters, either by
 	// specifying the number of clusters K, or by

@@ -70,7 +70,7 @@ int main(int argc, char * argv[])
 	classf.clustering(myCLA.algorithmType);
 	cout<<"  Clustering completed, output results ..." << endl;
 
-
+	
 	unsigned int size_threshold = 1;
 	string s = string(myCLA.clusterFilename);
 	classf.print_clusters(s, size_threshold);
