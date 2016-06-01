@@ -184,9 +184,6 @@ public:
 		return write_data(bf_filename, to_save_string()) && str_table.save(pkg_table_filename);
 	}
 
-	
-
-
 	bool is_valid()
 	{
 		return bf_valid;

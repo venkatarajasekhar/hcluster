@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <malloc.h>
+#include <dirent.h>
 #include "bitset_util.h"
 
 using namespace std;
@@ -40,6 +41,30 @@ int bitsetfromfile(const char *file_name, vector<bitset<FEATURE_SIZE> > &bss)
 	cout << "Cannot open file " << file_name << endl;
 	return 0;
 }
+
+
+/*
+int bitsetfromdirectory(const char * directory_name, vector<bitset<FEATURE_SIZE> > & bss)
+{
+	DIR * dir
+	struct dirent * ent;
+
+	if((dir = opendir(directory_name)) != NULL)
+	{
+		while((ent = readdir(dir)) != NULL)
+		{
+
+		}
+
+		closedir(dir);
+
+		return 1;
+	}
+
+	cout << "Cannot find directory " << directory_name << endl;
+	return 0;
+}
+*/
 
 int bitsetfromCCS(const char *prefix, vector<bitset<FEATURE_SIZE> > &bss)
 {
