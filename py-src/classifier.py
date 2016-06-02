@@ -98,9 +98,9 @@ class classifier:
 		self.Dist = dist
 		self.N = len(self.Dist)
 
-	def __init__(self, dist):
-		self.Dist = dist
-		self.N = len(self.Dist)
+	#def __init__(self, dist):
+	#	self.Dist = dist
+	#	self.N = len(self.Dist)
 
 
 	def setCluster(self, k):
@@ -131,7 +131,7 @@ class classifier:
 
 			for key in E_temp:
 				j = key
-				D_temp = distance(E_temp[key], key)
+				D_temp = Distance(E_temp[key], key)
 				V_temp[key] = D_temp
 
 				if key != i:
@@ -182,7 +182,53 @@ class classifier:
 			for m in range(self.N):
 				if len(self.C[m]) > 0:
 					if self.II[m] != 0 and m != k1 and k1 in self.C[m] and k2 in self.C[m]:
-						pass
+						del self.P[m][self.C[m][k1]]
+						del self.P[m][self.C[m][k2]]
+
+						if linkage_criteria == SINGLE_LINKAGE:
+							if self.C[m][k1].dist < self.C[m][k2].dist:
+								self.C[m][k1].dist = self.C[m][k1].dist
+							else:
+								self.C[m][k1].dist = self.C[m][k2].dist
+
+							self.C[k1][m].dist = self.C[m][k1].dist
+
+						if linkage_criteria == COMPLETE_LINKAGE:
+							if self.C[m][k1].dist > self.C[m][k2].dist:
+								self.C[m][k1].dist = self.C[m][k1].dist
+							else:
+								self.C[m][k1].dist = self.C[m][k2].dist
+
+							self.C[k1][m].dist = C[m][k1].dist
+
+						if linkage_criteria == AVG_LINKAGE:
+							self.C[m][k1].dist = (N_k1 * self.C[m][k1].dist + N_k2 * self.C[m][k2].dist)/(N_k1 + N_k2)
+							self.C[k1][m].dist = self.C[m][k1].dist
+
+						self.P[m][self.C[m][k1]] = self.C[m][k1]
+						self.P[k1][self.C[k1][m]] = self.C[k1][m]
+
+		print '  The min distance betwee clusters less than', min_dist
+
+	def print_clusters(self, size_threshold):
+		print 'Output Clusters with size at least', size_threshold
+
+		class_num = 0
+
+		for i in range(self.N):
+			if self.II[i] == 1:
+				if len(self.A[i]) >= size_threshold:
+					class_num += 1
+					print 
+					print 'Cluster', class_num, 'has', len(self.A[i])
+					self.A[i].sort()
+
+					for j in range(len(self.A[i])):
+						print self.A[i][j],
+
+					print
+
+
 
 
 
