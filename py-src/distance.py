@@ -28,7 +28,7 @@ def jaccard_distance(a, b):
 
 def all_pair_distance(features, distanceType, Dist):
 	N = len(features)
-	print '  Computing', N, 'X', N, 'distance matrix ...'
+	print ('  Computing', N, 'X', N, 'distance matrix ...')
 
 	del Dist[:]
 
@@ -53,4 +53,4 @@ if __name__=='__main__':
 	tmpList = [1,2,3]
 	testList(tmpList)
 
-	print tmpList
+	print (tmpList)
