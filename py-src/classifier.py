@@ -1,5 +1,9 @@
 from tools import *
 from bintrees import AVLTree
+import shutil
+import os
+from os import listdir
+from os.path import isfile, join
 
 class Distance:
 	def __init__(self, dist, index):
@@ -93,10 +97,11 @@ class classifier:
 	# vector<vector<float> > Dist;
 	# vector<unordered_map<int, float> > Dist;
 
-	def __init__(self, bfs, dist):
+	def __init__(self, bfs, dist, fList):
 		self.features = bfs
 		self.Dist = dist
 		self.N = len(self.Dist)
+		self.fileList = fList
 
 	#def __init__(self, dist):
 	#	self.Dist = dist
@@ -129,7 +134,7 @@ class classifier:
 			Q_temp = AVLTree()
 
 
-			for key in E_temp:
+			for key in range(len(E_temp)):
 				j = key
 				D_temp = Distance(E_temp[key], key)
 				V_temp[key] = D_temp
@@ -151,6 +156,8 @@ class classifier:
 		print '    Initialization ...\n'
 		self.initContainer()
 		print '    Merging clusters ...\n'
+
+		min_dist = MIN_DIST
 
 		for n in range(self.N - self.numCluster):
 			min_dist = MIN_DIST
@@ -210,7 +217,8 @@ class classifier:
 
 		print '  The min distance betwee clusters less than', min_dist
 
-	def print_clusters(self, size_threshold):
+
+	def printClusters(self, size_threshold):
 		print 'Output Clusters with size at least', size_threshold
 
 		class_num = 0
@@ -229,7 +237,23 @@ class classifier:
 					print
 
 
+	def separateFilesToClusters(self, sDirectory, size_threshold):
 
+		start = 0
+		for root, dirs, files in os.walk(sDirectory):
+			start += len(dirs)
+
+		for i in range(self.N):
+			if self.II[i] == 1:
+				if len(self.A[i]) >= size_threshold:
+					sDst = join(sDirectory, str(start))
+					os.makedirs(sDst)
+					
+
+					for j in range(len(self.A[i])):
+						shutil.copy(self.fileList[self.A[i][j]], sDst)
+
+					start += 1
 
 
 if __name__=='__main__':

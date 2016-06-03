@@ -1,6 +1,8 @@
 from fhash import *
 from tools import *
 import sys
+from os import listdir
+from os.path import isfile, join
 
 def bitsetfromCCS(prefix, bss):
 	filename = prefix + '_dim'
@@ -60,6 +62,41 @@ def bitsetfromCCS(prefix, bss):
 	for i in range(numCol):
 		for j in range(colPtr[i], colPtr[i+1]):
 			bss[rowIdx[j]][i] = 1	
+
+def bitsetfromDirectory(sDirectory, bss, fpFiles):
+	onlyfiles = [f for f in listdir(sDirectory) if isfile(join(sDirectory, f))]
+
+	for f in onlyfiles:
+		if f.endswith('.bb'):
+			fpFiles.append(f)
+
+	for i in range(len(fpFiles)):
+		bs = bitarray(FEATURE_SIZE)
+		bs.setall(False)
+		
+		sFileName = join(sDirectory, fpFiles[i])
+		fp = open(sFileName, 'r')
+		
+		sFirstLine = fp.readline()
+		sSecondLine = fp.readline()
+		iNum = int(sFirstLine)
+
+		while True:
+			line = fp.readline()
+			if not line:
+				break
+
+			numList = line.split()
+			bs[int(numList[0])] = 1
+
+		assert bs.count() == iNum
+
+		fp.close()
+
+		bss.append(bs)
+
+
+
 
 if __name__=='__main__':
 	sPrefix = sys.argv[1]
