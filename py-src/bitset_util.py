@@ -1,6 +1,7 @@
 from fhash import *
 from tools import *
 import sys
+import os
 from os import listdir
 from os.path import isfile, join
 
@@ -67,16 +68,53 @@ def bitsetfromDirectory(sDirectory, bss, fpFiles):
 	onlyfiles = [f for f in listdir(sDirectory) if isfile(join(sDirectory, f))]
 
 	for f in onlyfiles:
-		if f.endswith('.bb'):
-			fpFiles.append(f)
+		if not f.endswith('.bb'):
+			continue
 
-	for i in range(len(fpFiles)):
 		bs = bitarray(FEATURE_SIZE)
 		bs.setall(False)
 		
-		sFileName = join(sDirectory, fpFiles[i])
-		fp = open(sFileName, 'r')
+		sFileName = join(sDirectory, f)
 		
+		fp = open(sFileName, 'r')
+                
+                sFirstLine = fp.readline()
+                sSecondLine = fp.readline()
+                iNum = int(sFirstLine)
+
+                if int(sSecondLine) < 10:
+                        continue
+
+                while True:
+                        line = fp.readline()
+                        if not line:
+                                break
+
+                        numList = line.split()
+                        bs[int(numList[0])] = 1
+
+                assert bs.count() == iNum
+
+		fp.close()
+		
+		fpFiles.append(join(sDirectory, f))
+		bss.append(bs)
+
+
+
+
+def bitsetfromDirectoryMD5(sDirectory, bss, fpFiles, md5List):
+	for i in range(len(md5List)):
+		sFileName = join(sDirectory, md5List[i] + '.bb')
+		bs = bitarray(FEATURE_SIZE)
+		bs.setall(False)
+
+		if not os.path.exists(sFileName):
+			continue
+
+		fpFiles.append(sFileName)
+		fp = open(sFileName, 'r')
+
 		sFirstLine = fp.readline()
 		sSecondLine = fp.readline()
 		iNum = int(sFirstLine)
@@ -85,18 +123,13 @@ def bitsetfromDirectory(sDirectory, bss, fpFiles):
 			line = fp.readline()
 			if not line:
 				break
-
 			numList = line.split()
 			bs[int(numList[0])] = 1
 
 		assert bs.count() == iNum
 
 		fp.close()
-
 		bss.append(bs)
-
-
-
 
 if __name__=='__main__':
 	sPrefix = sys.argv[1]
