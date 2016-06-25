@@ -4,6 +4,7 @@ import sys
 import os
 from os import listdir
 from os.path import isfile, join
+import numpy as np 
 
 def bitsetfromCCS(prefix, bss):
 	filename = prefix + '_dim'
@@ -64,6 +65,51 @@ def bitsetfromCCS(prefix, bss):
 		for j in range(colPtr[i], colPtr[i+1]):
 			bss[rowIdx[j]][i] = 1	
 
+
+def listfromDirectory(sDirectory, listFPs, fpFiles):
+	onlyfiles = [f for f in listdir(sDirectory) if isfile(join(sDirectory, f))]
+	for f in onlyfiles:
+		if not f.endswith('.bb'):
+			continue
+
+		fp = [0] * FEATURE_SIZE
+
+		sFileName = join(sDirectory, f)
+		
+		ffpFile = open(sFileName, 'r')
+
+		sFirstLine = ffpFile.readline()
+		sSecondLine = ffpFile.readline()
+		iNum = int(sFirstLine)
+
+		if iNum < 10:
+			ffpFile.close()
+			continue
+
+		while True:
+			line = ffpFile.readline()
+			if not line:
+				break
+
+			numList = line.split()
+			fp[int(numList[0])] = 1
+
+		assert sum(fp) == iNum
+
+		ffpFile.close()
+
+
+		fpFiles.append(sFileName)
+		listFPs.append(fp)
+
+
+def numpyArrayfromDirectory(sDirectory, fpFiles):
+	listFPs = []
+	listfromDirectory(sDirectory, listFPs, fpFiles)
+
+	return np.array(listFPs)
+
+
 def bitsetfromDirectory(sDirectory, bss, fpFiles):
 	onlyfiles = [f for f in listdir(sDirectory) if isfile(join(sDirectory, f))]
 
@@ -78,30 +124,28 @@ def bitsetfromDirectory(sDirectory, bss, fpFiles):
 		
 		fp = open(sFileName, 'r')
                 
-                sFirstLine = fp.readline()
-                sSecondLine = fp.readline()
-                iNum = int(sFirstLine)
+		sFirstLine = fp.readline()
+		sSecondLine = fp.readline()
+		iNum = int(sFirstLine)
 
-                if int(sSecondLine) < 10:
-                        continue
+		if iNum < 10:
+			fp.close()
+			continue
 
-                while True:
-                        line = fp.readline()
-                        if not line:
-                                break
+		while True:
+			line = fp.readline()
+			if not line:
+				break
 
-                        numList = line.split()
-                        bs[int(numList[0])] = 1
+			numList = line.split()
+			bs[int(numList[0])] = 1
 
-                assert bs.count() == iNum
+		assert bs.count() == iNum
 
 		fp.close()
 		
 		fpFiles.append(join(sDirectory, f))
 		bss.append(bs)
-
-
-
 
 def bitsetfromDirectoryMD5(sDirectory, bss, fpFiles, md5List):
 	for i in range(len(md5List)):
