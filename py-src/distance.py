@@ -53,6 +53,28 @@ def all_pair_distance_dict(features, distanceType, Dist):
 		Dist.append(d_temp)
 
 def all_pair_distance_numpy(features, Dist):
+	N = features.shape[0]
+	print '  Computing', N, 'X', N, 'distance matrix ...'
+
+	sumFeatures = np.sum(features, axis = 1)
+	distMatrix = features.dot(np.transpose(features))
+
+	del Dist[:]
+
+	for i in range(N):
+		d_temp = []
+		for j in range(N):
+			union = sumA[i] + sumA[j] - distMatrix[i, j]
+			if union == 0:
+				d_temp.append(1)
+			else:
+				d_temp.append(1 - distMatrix[i, j] * 1.0 / union)
+
+		Dist.append(d_temp)
+
+
+
+def all_pair_distance_list(features, Dist):
 	N = len(features)
 	print '  Computing', N, 'X', N, 'distance matrix ...'
 
