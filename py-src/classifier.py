@@ -238,7 +238,6 @@ class classifier:
 
 
 	def separateFilesToClusters(self, sDirectory, size_threshold):
-
 		start = 0
 		for root, dirs, files in os.walk(sDirectory):
 			start += len(dirs)

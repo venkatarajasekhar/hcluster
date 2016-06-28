@@ -9,7 +9,7 @@ def runClustering(sPrefix):
 	bsList = []
 	distanceList = []
 
-	bitsetfromCCS(sPrefix, bsList)
+	bitsetFromCCS(sPrefix, bsList)
 	d_ok = all_pair_distance(bsList, JACCARD, distanceList)
 
 	classf = classifier(bsList, distanceList, [])

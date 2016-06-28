@@ -10,6 +10,7 @@ def jaccard_index(a, b):
 	return num/den
 
 
+
 if __name__=='__main__':
 	a = bitarray('101010')
 	b = bitarray('010101')

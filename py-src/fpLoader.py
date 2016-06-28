@@ -1,12 +1,14 @@
-from fhash import *
-from tools import *
 import sys
 import os
 from os import listdir
 from os.path import isfile, join
 import numpy as np 
 
-def bitsetfromCCS(prefix, bss):
+from fHash import *
+from tools import *
+
+
+def bitsetFromCCS(prefix, bss):
 	filename = prefix + '_dim'
 	with open(filename, 'r') as dimFile:
 		ContentList = dimFile.readlines()
@@ -178,7 +180,7 @@ def bitsetfromDirectoryMD5(sDirectory, bss, fpFiles, md5List):
 if __name__=='__main__':
 	sPrefix = sys.argv[1]
 	bss = []
-	bitsetfromCCS(sPrefix, bss)
+	bitsetFromCCS(sPrefix, bss)
 	print len(bss)
 
 	total = 0
