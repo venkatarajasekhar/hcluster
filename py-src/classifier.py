@@ -97,16 +97,11 @@ class classifier:
 	# vector<vector<float> > Dist;
 	# vector<unordered_map<int, float> > Dist;
 
-	def __init__(self, bfs, dist, fList):
-		self.features = bfs
+	def __init__(self, dist, fList):
+		#self.features = bfs
 		self.Dist = dist
 		self.N = len(self.Dist)
 		self.fileList = fList
-
-	#def __init__(self, dist):
-	#	self.Dist = dist
-	#	self.N = len(self.Dist)
-
 
 	def setCluster(self, k):
 		self.cutoffType = BY_NUMBER
@@ -186,6 +181,7 @@ class classifier:
 
 			self.II[k2] = 0
 
+			#update distance for merged clustering
 			for m in range(self.N):
 				if len(self.C[m]) > 0:
 					if self.II[m] != 0 and m != k1 and k1 in self.C[m] and k2 in self.C[m]:

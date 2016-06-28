@@ -3,12 +3,14 @@ import os
 from os import listdir
 from os.path import isfile, join
 import numpy as np 
+from bitarray import bitarray
 
-from fHash import *
 from tools import *
 
 
-def bitsetFromCCS(prefix, bss):
+def bitsetFromCCS(prefix):
+
+	bss = []
 	filename = prefix + '_dim'
 	with open(filename, 'r') as dimFile:
 		ContentList = dimFile.readlines()
@@ -67,9 +69,42 @@ def bitsetFromCCS(prefix, bss):
 		for j in range(colPtr[i], colPtr[i+1]):
 			bss[rowIdx[j]][i] = 1	
 
+	return bss
 
-def listfromDirectory(sDirectory, listFPs, fpFiles):
+
+def listFromFile(sFileName):
+	fp = [0] * FEATURE_SIZE
+	ffpFile = open(sFileName, 'r')
+
+	sFirstLine = ffpFile.readline()
+	sSecondLine = ffpFile.readline()
+
+	iNum = int(sFirstLine)
+
+	if iNum < 10:
+		ffpFile.close()
+		return []
+
+	while True:
+		line = ffpFile.readline()
+		if not line:
+			break
+
+		numList = line.split()
+		fp[int(numList[0])] = 1
+
+	assert sum(fp) == iNum
+
+	ffpFile.close()
+	return fp
+
+
+def listFromDirectory(sDirectory):
+	listFPs = []
+	fpFiles = []
+
 	onlyfiles = [f for f in listdir(sDirectory) if isfile(join(sDirectory, f))]
+
 	for f in onlyfiles:
 		if not f.endswith('.bb'):
 			continue
@@ -104,15 +139,18 @@ def listfromDirectory(sDirectory, listFPs, fpFiles):
 		fpFiles.append(sFileName)
 		listFPs.append(fp)
 
-
-def numpyArrayfromDirectory(sDirectory, fpFiles):
-	listFPs = []
-	listfromDirectory(sDirectory, listFPs, fpFiles)
-
-	return np.array(listFPs)
+	return listFPs, fpFiles
 
 
-def bitsetfromDirectory(sDirectory, bss, fpFiles):
+def numpyArrayFromDirectory(sDirectory):
+	listFPs, fpFiles = listfromDirectory(sDirectory)
+	return np.array(listFPs), fpFiles
+
+
+def bitsetFromDirectory(sDirectory):
+
+	bss = []
+	fpFiles = []
 	onlyfiles = [f for f in listdir(sDirectory) if isfile(join(sDirectory, f))]
 
 	for f in onlyfiles:
@@ -149,7 +187,15 @@ def bitsetfromDirectory(sDirectory, bss, fpFiles):
 		fpFiles.append(join(sDirectory, f))
 		bss.append(bs)
 
-def bitsetfromDirectoryMD5(sDirectory, bss, fpFiles, md5List):
+	return bss, fpFiles
+
+
+
+def bitsetFromDirectoryMD5(sDirectory, md5List):
+
+	bss = []
+	fpFiles = []
+
 	for i in range(len(md5List)):
 		sFileName = join(sDirectory, md5List[i] + '.bb')
 		bs = bitarray(FEATURE_SIZE)
@@ -176,6 +222,8 @@ def bitsetfromDirectoryMD5(sDirectory, bss, fpFiles, md5List):
 
 		fp.close()
 		bss.append(bs)
+
+	return bss, fpFiles
 
 if __name__=='__main__':
 	sPrefix = sys.argv[1]
