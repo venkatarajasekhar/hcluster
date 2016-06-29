@@ -1,5 +1,8 @@
 from tools import *
 from classifier import *
+from fpLoader import *
+from distance import *
+from sets import Set
 
 def clustering(distance, FileList, sDstDirectory, threshold):
 	classf = classifier(distance, FileList)
@@ -33,7 +36,7 @@ def runClustering(fpFileList, sDstDirectory, threshold):
 
 
 def runIncrementalClustering(fpFileLists, sDstDirectory, threshold):
-	if len(fpLists) == 0:
+	if len(fpFileLists) == 0:
 		return 
 
 	runClustering(fpFileLists[0], sDstDirectory, threshold)
@@ -61,6 +64,9 @@ def runIncrementalClustering(fpFileLists, sDstDirectory, threshold):
 
 				clusterFPList, clusterFileList = listFromDirectory(sCurrentClusterDirectory)
 				groupDistanceList = group_distance_list(fpList, clusterFPList)
+
+				#print groupDistanceList
+				#exit(0)
 
 				setInsert = Set([])
 
@@ -92,15 +98,39 @@ def runIncrementalClustering(fpFileLists, sDstDirectory, threshold):
 			clustering(pairDistance, fpFileFilteredList, sDstDirectory, threshold)
 		
 		index += 1
+		
 
 
 
-
-
-
+def chunks(l, n):
+	n = max(1, n)
+	return [l[i:i + n] for i in range(0, len(l), n)]
 
 
 
 if __name__=='__main__':
+	sDirectory = sys.argv[1]
+	sDstDirectory = sys.argv[2]
 
-	print 'hello world'
+	listFPs, fpFiles = listFromDirectory(sDirectory)
+
+	fpFileLists = chunks(fpFiles, 100)
+
+	#testFPs = []
+
+	#for fpFile in fpFileLists[0]:
+	#	testFPs.append(listFromFile(fpFile))
+
+	#for fpFile in fpFileLists[1]:
+	#	testFPs.append(listFromFile(fpFile))
+
+	distance = all_pair_distance_list(listFPs)	
+	classf = classifier(distance, [])
+	classf.setThreshold(0.1)
+
+	classf.clustering(SINGLE_LINKAGE)
+	classf.printClusters(1)
+	#runIncrementalClustering(fpFileLists, sDstDirectory, 0.1)
+
+
+

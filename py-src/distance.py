@@ -93,7 +93,7 @@ def all_pair_distance_list(features):
 
 	A = np.zeros((N, FEATURE_SIZE))
 	for i in range(N):
-		for j in range(features[i].length()):
+		for j in range(FEATURE_SIZE):
 			A[i, j] = features[i][j]
 
 	return all_pair_distance_numpy(A)
@@ -102,7 +102,7 @@ def all_pair_distance_list(features):
 
 def group_distance_numpy(features1, features2):
 	N = features1.shape[0]
-	M = features2.shape[1]
+	M = features2.shape[0]
 
 	print '  Computing', N, 'X', M, 'distance matrix ...'
 
@@ -111,6 +111,7 @@ def group_distance_numpy(features1, features2):
 	sumFeatures2 = np.sum(features2, axis = 1)
 
 	distMatrix = features1.dot(np.transpose(features2))
+	#print features2
 
 	for i in range(N):
 		d_temp = []
@@ -126,11 +127,22 @@ def group_distance_numpy(features1, features2):
 	return Dist
 
 def group_distance_list(features1, features2):
-	N = len(features1)
-	M = len(features2)
+	#N = len(features1)
+	#M = len(features2)
 
-	A = np.zeros((N, FEATURE_SIZE))
-	B = np.zeros((M, FEATURE_SIZE))
+	#A = np.zeros((N, FEATURE_SIZE))
+	#B = np.zeros((M, FEATURE_SIZE))
+
+	#for i in range(N):
+	#	for j in range(FEATURE_SIZE):
+	#		A[i, j] = features1[i][j]
+
+	#for i in range(M):
+	#	for j in range(FEATURE_SIZE):
+	#		B[i, j] = features2[i][j]
+
+	A = np.array(features1)
+	B = np.array(features2)
 
 	return group_distance_numpy(A, B)
 

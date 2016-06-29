@@ -71,6 +71,22 @@ def bitsetFromCCS(prefix):
 
 	return bss
 
+def listFromCCS(prefix):
+	bss = bitsetFromCCS(prefix)
+	fpList = []
+
+	for i in range(len(bss)):
+		fp = []
+		for j in range(bss[i].length()):
+			if bss[i][j]:
+				fp.append(1)
+			else:
+				fp.append(0)
+
+		fpList.append(fp)
+
+	return fpList
+
 
 def listFromFile(sFileName):
 	fp = [0] * FEATURE_SIZE
