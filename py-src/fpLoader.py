@@ -115,6 +115,9 @@ def listFromFile(sFileName):
 	return fp
 
 
+
+
+
 def listFromDirectory(sDirectory):
 	listFPs = []
 	fpFiles = []
@@ -135,7 +138,7 @@ def listFromDirectory(sDirectory):
 		sSecondLine = ffpFile.readline()
 		iNum = int(sFirstLine)
 
-		if iNum < 10:
+		if iNum < 10 or iNum > 168005:
 			ffpFile.close()
 			continue
 

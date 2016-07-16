@@ -90,7 +90,7 @@ def all_pair_distance_numpy(features):
 
 def all_pair_distance_list(features):
 	N = len(features)
-
+	print 'N & FEATURESIZE:', N, FEATURE_SIZE
 	A = np.zeros((N, FEATURE_SIZE))
 	for i in range(N):
 		for j in range(FEATURE_SIZE):
