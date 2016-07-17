@@ -97,7 +97,7 @@ def listFromFile(sFileName):
 
 	iNum = int(sFirstLine)
 
-	if iNum < 10:
+	if iNum < 10 or iNum > 168005:
 		ffpFile.close()
 		return []
 
@@ -187,7 +187,7 @@ def bitsetFromDirectory(sDirectory):
 		sSecondLine = fp.readline()
 		iNum = int(sFirstLine)
 
-		if iNum < 10:
+		if iNum < 10 or iNum > 168005:
 			fp.close()
 			continue
 
