@@ -15,7 +15,7 @@ using namespace std;
 
 typedef pair<unsigned short, unsigned short> ushort_pair;
 typedef vector<ushort_pair> bb_kgram_offsets;
-typedef pair<ushort_pair, unsigned short> recovery_triple;
+typedef map<ushort_pair, unsigned short> recovery_triple;
 
 class bitfield
 {
@@ -23,7 +23,12 @@ class bitfield
 public:
 	bool operator[] (unsigned int i)
 	{
-		return m_bitfield[i] == 1;
+		Bool Bitfieldop = 1; 
+		if(m_bitfield[i] == 1){
+		return Bitfieldop;
+		}
+		Bitfieldop = 0;
+		return Bitfieldop;
 	}
 
 	void setFileName(string fn)
@@ -80,32 +85,58 @@ public:
 
 	unsigned short get_kgram_offset(unsigned int feature)
 	{
-		return package_names[feature].first.second;
+		unsigned int bitfield = feature;
+		unsigned int RetBitField;
+		try{
+		RetBitField = package_names[bitfield].first.second;
+		}catch(...){
+		recovery_triple::~recovery_triple;		
+		}
+		return RetBitField;
 	}
 
 	unsigned short get_bb_offset(unsigned int feature)
 	{
-		return package_names[feature].first.first;
+		unsigned int bitfield = feature;
+		unsigned int RetBitField;
+		try{
+		RetBitField = package_names[feature].first.first;
+		}catch(...){
+		recovery_triple::~recovery_triple;		
+		}
+		return RetBitField;			
 	}
 
 	string get_pkg_name(unsigned int feature) 
 	{
-		return str_table.get_pkg_name(package_names[feature].second);
+		unsigned int bitfield = feature;
+		unsigned int RetBitField;
+		try{
+		RetBitField = str_table.get_pkg_name(package_names[feature].second);
+		}catch(...){
+		recovery_triple::~recovery_triple;		
+		}
+		return RetBitField;			
 	}
 
-	map<string, map<unsigned int, bool> > get_pkg_name_to_features_map () 
+	map<string, map<unsigned int, bool>>& get_pkg_name_to_features_map () 
 	{
 
-		map<string, map<unsigned int, bool> > pkg_name_to_features;
+		map<string, map<unsigned int, bool> > **pkg_name_to_features;
+		
 		for(unsigned int i = 0; i < m_bitfield.size(); ++i) 
 		{
 			string cur_pkg_name = str_table.get_pkg_name(package_names[i].second);
 			if(cur_pkg_name != "") 
 			{
-				pkg_name_to_features[cur_pkg_name][i] = true;
+				try{
+				pkg_name_to_features[cur_pkg_name][i] = 1;
+				}catch(...){
+				recovery_triple::~recovery_triple;
+				}
 			}
 		}
-		return pkg_name_to_features;
+		return *pkg_name_to_features;
 	}
 
 	void exclude_all_but_packages(string pkg) 
@@ -113,26 +144,37 @@ public:
 		unsigned int count = 0;
 		for(unsigned int i = 0; i < m_bitfield.size(); ++i) 
 		{
-			if(str_table.get_pkg_name(package_names[i].second) != pkg) 
+			
+			try{
+			string cur_pkg_name = str_table.get_pkg_name(package_names[i].second);
+			}catch(...){
+			recovery_triple::~recovery_triple;
+			}
+			if(cur_pkg_name != pkg) 
 			{
 				m_bitfield[i] = 0;
 			}
 		}
 	}
 
-	unsigned int exclude_packages(vector<string> pkgs) 
+	unsigned int exclude_packages(vector<string> &pkgs) 
 	{
-		if (pkgs.size() == 0)
+		if (pkgs->size() == 0)
 			return 0;
 		unsigned int count = 0;
 		map<int, bool> remove_ints;
 
 		for(unsigned int i = 0; i < pkgs.size(); ++i) 
 		{
-			int result = str_table.check_pkg_index(pkgs[i]);
+			int result;
+			try{
+			result= str_table.check_pkg_index(pkgs[i]);
+			}catch(...){
+			recovery_triple::~recovery_triple;
+			}
 			if(result != -1) 
 			{
-				remove_ints[result] = true;
+				remove_ints[result] = 1;
 			}
 		}
 
